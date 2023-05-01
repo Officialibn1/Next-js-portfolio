@@ -7,45 +7,90 @@ import { TimeLineData } from '../../constants/constants';
 const TOTAL_CAROUSEL_COUNT = TimeLineData.length;
 
 const Timeline = () => {
-  // const [activeItem, setActiveItem] = useState(0);
-  // const carouselRef = useRef();
+  const [activeItem, setActiveItem] = useState(0);
+  const carouselRef = useRef();
 
-  // const scroll = (node, left) => {
-  //   return node.scrollTo({ left, behavior: 'smooth' });
-  // }
+  const scroll = (node, left) => {
+    return node.scrollTo({ left, behavior: 'smooth' });
+  }
 
-  // const handleClick = (e, i) => {
-  //   e.preventDefault();
 
-  //   if (carouselRef.current) {
-  //     const scrollLeft = Math.floor(carouselRef.current.scrollWidth * 0.7 * (i / TimeLineData.length));
+  // Function for handling the onclick even of any carousel item clicked.
+  const handleClick = (e, i) => {
+    e.preventDefault();
+
+    if (carouselRef.current) {
+      const scrollLeft = Math.floor(carouselRef.current.scrollWidth * 0.7 * (i / TimeLineData.length));
       
-  //     scroll(carouselRef.current, scrollLeft);
-  //   }
-  // }
+      scroll(carouselRef.current, scrollLeft);
+    }
+  }
 
-  // const handleScroll = () => {
-  //   if (carouselRef.current) {
-  //     const index = Math.round((carouselRef.current.scrollLeft / (carouselRef.current.scrollWidth * 0.7)) * TimeLineData.length);
+  const handleScroll = () => {
+    if (carouselRef.current) {
+      const index = Math.round((carouselRef.current.scrollLeft / (carouselRef.current.scrollWidth * 0.7)) * TimeLineData.length);
 
-  //     setActiveItem(index);
-  //   }
-  // }
+      setActiveItem(index);
+    }
+  }
 
   // // snap back to beginning of scroll when window is resized
   // // avoids a bug where content is covered up if coming from smaller screen
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     scroll(carouselRef.current, 0);
-  //   }
+  useEffect(() => {
+    const handleResize = () => {
+      scroll(carouselRef.current, 0);
+    }
 
-  //   window.addEventListener('resize', handleResize);
-  // }, []);
+    window.addEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <div>
-      Timeline
-    </div>
+    <Section id='about'>
+      <SectionDivider />
+      <br /><br />
+      <SectionTitle>About Me</SectionTitle>
+
+      <SectionText>
+        My journey in the tech industry have been a very fulfilling one, I got to work and interact with a lot of people but physically and in remote ways. Through this journey I also discovered myself, my wicknesses and my strenghts. <br /><br /> Below is a diagram representation of my journey, enjoy, Smiles. 
+      </SectionText>
+
+      <CarouselContainer ref={carouselRef} onScroll={handleScroll}>
+        <>
+          {TimeLineData.map((item, index) => (
+            <CarouselMobileScrollNode key={index} final={index === TOTAL_CAROUSEL_COUNT - 1}>
+
+              <CarouselItem
+                index={index}
+                id={`corousel_item-${index}`}
+                active={activeItem}
+                onClick={(e) => handleClick(e, index)}
+              >
+
+              <CarouselItemTitle>
+                {item.year}
+              </CarouselItemTitle>
+              <CarouselItemText>
+                {item.text}
+              </CarouselItemText>
+              </CarouselItem>
+            </CarouselMobileScrollNode>
+          ))}
+        </>
+      </CarouselContainer>
+      <CarouselButtons>
+        {TimeLineData.map((item, index) => (
+          <CarouselButton
+            key={index}
+            index={index}
+            active={activeItem}
+            onClick={(e) => handleClick(e, index)}
+            type='button'
+          >
+            <CarouselButtonDot />
+          </CarouselButton>
+        ))}
+      </CarouselButtons>
+    </Section>
   );
 };
 
