@@ -19,7 +19,7 @@ const Projects = () => (
           <Img src={image} />
 
           <TitleContent>
-            <HeaderThree title>
+            <HeaderThree title='true'>
               {title}
             </HeaderThree>
 
